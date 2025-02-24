@@ -79,7 +79,7 @@ class WeightWatcher: ObservableObject {
     }
     
     /// returns weight of config in the app unit
-    func calculateWeightOfActiveConfig(_ barID: UUID) -> Double {
+    func calculateWeightOfActiveConfig() -> Double {
         if let config = inventory.configurations.last {
             let barWeightInAppUnit = calculateWeightInAppUnit(weight: config.weight, unit: config.unit)
             var totalWeight = barWeightInAppUnit

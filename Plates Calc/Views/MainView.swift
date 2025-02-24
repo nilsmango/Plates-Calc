@@ -22,7 +22,7 @@ struct MainView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                WeightView(weight: 1231.23, unit: weightWatcher.inventory.appUnit)
+                WeightView(weight: weightWatcher.calculateWeightOfActiveConfig(), unit: weightWatcher.inventory.appUnit)
                 ConfigView(config: weightWatcher.inventory.configurations.last)
     //
                 PlatesView(weightWatcher: weightWatcher, config: weightWatcher.inventory.configurations.last ?? Bar(id: UUID(), kind: .bar, name: "", weight: 0, unit: .kg, color: .black, weights: [:]), plates: weightWatcher.inventory.plates)
