@@ -9,9 +9,13 @@ import SwiftUI
 
 @main
 struct Plates_CalcApp: App {
+    @StateObject private var weightWatcher = WeightWatcher()
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainView(weightWatcher: weightWatcher)
+                .onAppear {
+                    weightWatcher.loadInventoryFromDisk()
+                }
         }
     }
 }
