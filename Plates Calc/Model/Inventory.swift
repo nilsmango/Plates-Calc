@@ -45,12 +45,14 @@ struct Bar: Codable {
 }
 
 enum ConfigKind: String, Codable, CaseIterable {
-    case bar, kettlebell
+    case dumbbell, barbell, kettlebell
     
     var displayName: String {
         switch self {
-        case .bar:
-            return "Bar (weights on each side)"
+        case .dumbbell:
+            return "Dumbbell"
+        case .barbell:
+            return "Barbell"
         case .kettlebell:
             return "Kettlebell (one weight only)"
         }

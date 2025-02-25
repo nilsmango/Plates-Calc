@@ -22,8 +22,19 @@ struct PlatesView: View {
 
     var body: some View {
         if plates.isEmpty {
+            VStack {
+                Text("Add a Plate to see it here.")
+                    .foregroundStyle(.secondary)
+                    .padding()
+                
+                Button {
+                    weightWatcher.showAddInventorySheetPlate = true
+                } label: {
+                    Label("Add Plate", systemImage: "plus.circle.fill")
+                }
+                .buttonStyle(.borderedProminent)
+            }
             
-            Text("Add a Plate to see it here.")
             
         } else {
             
@@ -48,5 +59,5 @@ struct PlatesView: View {
 #Preview {
     let firstID = UUID()
     let secondID = UUID()
-    PlatesView(weightWatcher: WeightWatcher(), config: Bar(id: UUID(), kind: .bar, name: "something", weight: 3.4, unit: .kg, color: .black,weights: [Plate(id: firstID, weight: 21.2, unit: .lb, color: .gray) : 3, Plate(id: secondID, weight: 5.5, unit: .kg, color: .black) : 4]), plates: [Plate(id: firstID, weight: 21.2, unit: .lb, color: .gray), Plate(id: UUID(), weight: 123, unit: .lb, color: .green), Plate(id: UUID(), weight: 2.2, unit: .kg, color: .purple), Plate(id: secondID, weight: 5.5, unit: .kg, color: .black)])
+    PlatesView(weightWatcher: WeightWatcher(), config: Bar(id: UUID(), kind: .dumbbell, name: "something", weight: 3.4, unit: .kg, color: .black,weights: [Plate(id: firstID, weight: 21.2, unit: .lb, color: .gray) : 3, Plate(id: secondID, weight: 5.5, unit: .kg, color: .black) : 4]), plates: [Plate(id: firstID, weight: 21.2, unit: .lb, color: .gray), Plate(id: UUID(), weight: 123, unit: .lb, color: .green), Plate(id: UUID(), weight: 2.2, unit: .kg, color: .purple), Plate(id: secondID, weight: 5.5, unit: .kg, color: .black)])
 }

@@ -54,7 +54,7 @@ struct AddInventorySheet: View {
 
 #Preview {
     NavigationStack {
-        AddInventorySheet(addingBar: false, weight: .constant(1.23), unit: .constant(.kg), color: .constant(.blue), name: .constant("nonef"), kind: .constant(.bar))
+        AddInventorySheet(addingBar: false, weight: .constant(1.23), unit: .constant(.kg), color: .constant(.blue), name: .constant("nonef"), kind: .constant(.dumbbell))
     }
     
 }

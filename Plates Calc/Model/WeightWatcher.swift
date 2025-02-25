@@ -9,9 +9,11 @@ import Foundation
 
 /// Last of configs is the active bar
 class WeightWatcher: ObservableObject {
+    
+    // MARK: - Inventory
+    
     @Published var inventory = Inventory()
     
-    // MARK: - Storage
     private let storageURL: URL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("PlatesCalc.data")
 
     private func saveInventoryToDisk() {
@@ -32,7 +34,22 @@ class WeightWatcher: ObservableObject {
         }
     }
     
-    // MARK: - Functions
+    // MARK: - Bars
+    
+    func addBarToConfigs(_ bar: Bar) {
+        inventory.configurations.append(bar)
+        saveInventoryToDisk()
+    }
+    
+    func removeBarFromConfigs(_ bar: Bar) {
+        inventory.configurations.removeAll { $0.id == bar.id }
+        saveInventoryToDisk()
+    }
+    
+    
+    // MARK: - Plates
+    
+    let platesCornerRadius = 8.0
     
     func addNewPlate(_ plate: Plate) {
         inventory.plates.append(plate)
@@ -51,16 +68,6 @@ class WeightWatcher: ObservableObject {
         }
     }
     
-    func addBarToConfigs(_ bar: Bar) {
-        inventory.configurations.append(bar)
-        saveInventoryToDisk()
-    }
-    
-    func removeBarFromConfigs(_ bar: Bar) {
-        inventory.configurations.removeAll { $0.id == bar.id }
-        saveInventoryToDisk()
-    }
-    
     func addPlateToActiveConfig(_ plate: Plate, remove: Bool = false) {
         if inventory.configurations.isEmpty { return }
         let index = inventory.configurations.count - 1
@@ -77,6 +84,8 @@ class WeightWatcher: ObservableObject {
         }
         saveInventoryToDisk()
     }
+    
+    // MARK: - Weight
     
     /// returns weight of config in the app unit
     func calculateWeightOfActiveConfig() -> Double {
@@ -105,5 +114,10 @@ class WeightWatcher: ObservableObject {
             return weight * 0.45359237
         }
     }
+    
+    // MARK: - Adding and Editing
+    
+    @Published var showAddInventorySheetBar = false
+    @Published var showAddInventorySheetPlate = false
     
 }

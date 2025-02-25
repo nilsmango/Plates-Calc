@@ -17,7 +17,7 @@ struct PlateView: View {
     var body: some View {
         HStack {
             ZStack {
-                RoundedRectangle(cornerRadius: 8)
+                RoundedRectangle(cornerRadius: weightWatcher.platesCornerRadius)
                     .fill(plate.color)
                 VStack {
                     Button {

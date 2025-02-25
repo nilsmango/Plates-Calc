@@ -10,22 +10,22 @@ import SwiftUI
 struct MainView: View {
     @ObservedObject var weightWatcher: WeightWatcher
     
-    @State private var showAddInventorySheetBar = false
-    @State private var showAddInventorySheetPlate = false
-    
     @State private var weight: Double = 0
     @State private var unit: Unit = .kg
     @State private var color: Color = .black
     @State private var name: String = ""
-    @State private var kind: ConfigKind = .bar
+    @State private var kind: ConfigKind = .dumbbell
     
     var body: some View {
         NavigationStack {
             VStack {
-                WeightView(weight: weightWatcher.calculateWeightOfActiveConfig(), unit: weightWatcher.inventory.appUnit)
-                ConfigView(config: weightWatcher.inventory.configurations.last)
-    //
-                PlatesView(weightWatcher: weightWatcher, config: weightWatcher.inventory.configurations.last ?? Bar(id: UUID(), kind: .bar, name: "", weight: 0, unit: .kg, color: .black, weights: [:]), plates: weightWatcher.inventory.plates)
+                WeightView(weight: weightWatcher.calculateWeightOfActiveConfig(), unit: weightWatcher.inventory.appUnit, isDumbbell: weightWatcher.inventory.configurations.last?.kind ?? ConfigKind.barbell == .dumbbell ? true : false)
+                
+                ConfigView(weightWatcher: weightWatcher, config: weightWatcher.inventory.configurations.last)
+                    .padding(.bottom)
+
+                //
+                PlatesView(weightWatcher: weightWatcher, config: weightWatcher.inventory.configurations.last ?? Bar(id: UUID(), kind: .dumbbell, name: "", weight: 0, unit: .kg, color: .black, weights: [:]), plates: weightWatcher.inventory.plates)
                 
             }
             .padding()
@@ -33,11 +33,11 @@ struct MainView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     Menu {
                         Button("Add Bar") {
-                            showAddInventorySheetBar = true
+                            weightWatcher.showAddInventorySheetBar = true
                             name = ""
                         }
                         Button("Add Plate") {
-                            showAddInventorySheetPlate = true
+                            weightWatcher.showAddInventorySheetPlate = true
                         }
                     } label: {
                         Label("Add", systemImage: "plus.circle.fill")
@@ -50,13 +50,13 @@ struct MainView: View {
                     }
                 }
             }
-            .sheet(isPresented: $showAddInventorySheetBar, content: {
+            .sheet(isPresented: $weightWatcher.showAddInventorySheetBar, content: {
                 NavigationStack {
                     AddInventorySheet(addingBar: true, weight: $weight, unit: $unit, color: $color, name: $name, kind: $kind)
                         .toolbar {
                             ToolbarItem(placement: .topBarLeading) {
                                 Button {
-                                    showAddInventorySheetBar = false
+                                    weightWatcher.showAddInventorySheetBar = false
                                     weight = 0
                                     name = ""
                                 } label: {
@@ -66,7 +66,7 @@ struct MainView: View {
                             }
                             ToolbarItem(placement: .topBarTrailing) {
                                 Button {
-                                    showAddInventorySheetBar = false
+                                    weightWatcher.showAddInventorySheetBar = false
                                     weightWatcher.addBarToConfigs(Bar(id: UUID(), kind: kind, name: name, weight: weight, unit: unit, color: color, weights: [:]))
                                     weight = 0
                                     name = ""
@@ -79,13 +79,13 @@ struct MainView: View {
             }
             )
             
-            .sheet(isPresented: $showAddInventorySheetPlate, content: {
+            .sheet(isPresented: $weightWatcher.showAddInventorySheetPlate, content: {
                 NavigationStack {
                     AddInventorySheet(addingBar: false, weight: $weight, unit: $unit, color: $color, name: $name, kind: $kind)
                         .toolbar {
                             ToolbarItem(placement: .topBarLeading) {
                                 Button {
-                                    showAddInventorySheetPlate = false
+                                    weightWatcher.showAddInventorySheetPlate = false
                                     weight = 0
                                 } label: {
                                     Text("Cancel")
@@ -94,7 +94,7 @@ struct MainView: View {
                             }
                             ToolbarItem(placement: .topBarTrailing) {
                                 Button {
-                                    showAddInventorySheetPlate = false
+                                    weightWatcher.showAddInventorySheetPlate = false
                                     weightWatcher.addNewPlate(Plate(id: UUID(), weight: weight, unit: unit, color: color))
                                     weight = 0
                                 } label: {
