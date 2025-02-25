@@ -32,23 +32,52 @@ struct MainView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Menu {
-                        Button("Add Bar") {
-                            weightWatcher.showAddInventorySheetBar = true
-                            name = ""
+                        Section {
+                            Button {
+                                weightWatcher.showAddInventorySheetBar = true
+                                name = ""
+                            } label: {
+                                Label("Add Bar", systemImage: "plus")
+                            }
+                            
+                            Button {
+                                // todo only show if we have a bar
+                            } label: {
+                                Label("Edit active Bar", systemImage: "square.and.pencil")
+                            }
+                            
+                            Button(role: .destructive) {
+                                // todo only show if we have a bar
+                            } label: {
+                                Label("Remove active Bar", systemImage: "trash")
+                            }
+                            
                         }
-                        Button("Add Plate") {
-                            weightWatcher.showAddInventorySheetPlate = true
+                        
+                        Section {
+                            Button {
+                                weightWatcher.showAddInventorySheetPlate = true
+                            } label: {
+                                Label("Add Plate", systemImage: "plus")
+                            }
+                            
+                            Button {
+                                // todo only show if we have a plate, then go in edit mode with - in circle on top of plates
+                            } label: {
+                                Label("Edit Plates", systemImage: "square.and.pencil")
+                            }
                         }
+                        
+                        NavigationLink(destination: OptionsView(weightWatcher: weightWatcher)) {
+                            Label("Options", systemImage: "ellipsis")
+                        }
+                        
                     } label: {
-                        Label("Add", systemImage: "plus.circle.fill")
+                        Label("Options", systemImage: "ellipsis.circle.fill")
                     }
                     
                 }
-                ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink(destination: OptionsView(weightWatcher: weightWatcher)) {
-                        Label("Options", systemImage: "ellipsis.circle.fill")
-                    }
-                }
+                
             }
             .sheet(isPresented: $weightWatcher.showAddInventorySheetBar, content: {
                 NavigationStack {

@@ -16,8 +16,12 @@ struct ConfigView: View {
     var body: some View {
         if let config = config {
             HStack {
+                
+                Spacer(minLength: 0)
+                
                 BarView(config: config)
-                    .padding(.leading)
+                
+                Spacer(minLength: 0)
                 
                 VStack(alignment: .leading) {
                     Text("\(config.name)")
@@ -28,10 +32,11 @@ struct ConfigView: View {
                 .fontDesign(.rounded)
                 .padding(.leading, 8)
                 
-                Text("Edit?")
-                    .padding()
-                
-                Spacer()
+                Spacer(minLength: 0)
+            }
+            .contentShape(Rectangle())
+            .onTapGesture {
+                print("change (if more than one saved), add or edit bar")
             }
             
                 
@@ -53,5 +58,5 @@ struct ConfigView: View {
 }
 
 #Preview {
-    ConfigView(weightWatcher: WeightWatcher(), config: Bar(id: UUID(), kind: .dumbbell, name: "Ironmaster", weight: 3.2, unit: .kg, color: .gray, weights: [Plate(id: UUID(), weight: 5, unit: .lb, color: .black) : 6, Plate(id: UUID(), weight: 2, unit: .lb, color: .black) : 4]))
+    ConfigView(weightWatcher: WeightWatcher(), config: Bar(id: UUID(), kind: .dumbbell, name: "Ironmaster", weight: 3.2, unit: .kg, color: .gray, weights: [Plate(id: UUID(), weight: 5, unit: .lb, color: .black) : 2, Plate(id: UUID(), weight: 2, unit: .lb, color: .black) : 2]))
 }

@@ -33,11 +33,11 @@ struct BarView: View {
         ZStack {
             if config.kind == .kettlebell {
                 // Kettlebell implementation
-                VStack(spacing: plateSpacing) {
+                VStack(spacing: plateSpacing * 3) {
                     // Handle
-                    KettlebellHandle()
-                        .stroke(config.color, lineWidth: 8)
-                                .frame(width: screenWidth * 0.2, height: screenWidth * 0.2)
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(config.color, lineWidth: plateWidth(for: 2))
+                                .frame(width: screenWidth * 0.15, height: screenWidth * 0.17)
                     
                     // Bell
                     VStack(spacing: plateSpacing) {
@@ -107,5 +107,5 @@ struct KettlebellHandle: Shape {
 }
 
 #Preview {
-    BarView(config: Bar(id: UUID(), kind: .barbell, name: "Ironmaster", weight: 3.2, unit: .kg, color: .gray, weights: [Plate(id: UUID(), weight: 5, unit: .lb, color: .black) : 6, Plate(id: UUID(), weight: 2, unit: .lb, color: .black) : 4]))
+    BarView(config: Bar(id: UUID(), kind: .kettlebell, name: "Ironmaster", weight: 3.2, unit: .kg, color: .gray, weights: [Plate(id: UUID(), weight: 5, unit: .lb, color: .black) : 6, Plate(id: UUID(), weight: 2, unit: .lb, color: .black) : 4]))
 }
