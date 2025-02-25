@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		78E8555F2D6DC9850043EE85 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 78E8555E2D6DC9850043EE85 /* README.md */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		78E854FF2D6BACE80043EE85 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,6 +31,7 @@
 		78E854ED2D6BACE70043EE85 /* Plates Calc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Plates Calc.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		78E854FE2D6BACE80043EE85 /* Plates CalcTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Plates CalcTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		78E855082D6BACE80043EE85 /* Plates CalcUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Plates CalcUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		78E8555E2D6DC9850043EE85 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -75,6 +80,7 @@
 		78E854E42D6BACE70043EE85 = {
 			isa = PBXGroup;
 			children = (
+				78E8555E2D6DC9850043EE85 /* README.md */,
 				78E854EF2D6BACE70043EE85 /* Plates Calc */,
 				78E855012D6BACE80043EE85 /* Plates CalcTests */,
 				78E8550B2D6BACE80043EE85 /* Plates CalcUITests */,
@@ -212,6 +218,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				78E8555F2D6DC9850043EE85 /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
