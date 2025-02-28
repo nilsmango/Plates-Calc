@@ -42,7 +42,7 @@ struct BarView: View {
                     // Bell
                     VStack(spacing: plateSpacing) {
                         ForEach(Array(config.weights.keys), id: \.id) { plate in
-                            ForEach(0..<((config.weights[plate] ?? 0))) { _ in
+                            ForEach(0..<((config.weights[plate] ?? 0) / 2), id: \.self) { _ in
                                 RoundedRectangle(cornerRadius: 4)
                                     .fill(plate.color)
                                     .frame(width: screenWidth * 0.3, height: plateWidth(for: plate.weight))
@@ -61,7 +61,7 @@ struct BarView: View {
                     // Left plates
                     HStack(spacing: plateSpacing) {
                         ForEach(Array(config.weights.keys), id: \.id) { plate in
-                            ForEach(0..<((config.weights[plate] ?? 0) / 2)) { _ in
+                            ForEach(0..<((config.weights[plate] ?? 0) / 2), id: \.self) { _ in
                                 RoundedRectangle(cornerRadius: 4)
                                     .fill(plate.color)
                                     .frame(width: plateWidth(for: plate.weight), height: screenWidth * 0.3)
@@ -75,7 +75,7 @@ struct BarView: View {
                     // Right plates (mirrored)
                     HStack(spacing: plateSpacing) {
                         ForEach(Array(config.weights.keys), id: \.id) { plate in
-                            ForEach(0..<((config.weights[plate] ?? 0) / 2)) { _ in
+                            ForEach(0..<((config.weights[plate] ?? 0) / 2), id: \.self) { _ in
                                 RoundedRectangle(cornerRadius: 4)
                                     .fill(plate.color)
                                     .frame(width: plateWidth(for: plate.weight), height: screenWidth * 0.3)

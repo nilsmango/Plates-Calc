@@ -160,9 +160,9 @@ class WeightWatcher: ObservableObject {
             return weight
         }
         switch inventory.appUnit {
-        case .kg:
-            return weight / 0.45359237
         case .lb:
+            return weight / 0.45359237
+        case .kg:
             return weight * 0.45359237
         }
     }

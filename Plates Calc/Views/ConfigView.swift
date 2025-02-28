@@ -19,7 +19,6 @@ struct ConfigView: View {
                 BarSectionMenuButtons(weightWatcher: weightWatcher)
             } label: {
                 HStack {
-                    
                     Spacer(minLength: 0)
                     
                     BarView(config: config)

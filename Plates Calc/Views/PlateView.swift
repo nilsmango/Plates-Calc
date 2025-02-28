@@ -15,6 +15,8 @@ struct PlateView: View {
     
     let width = UIScreen.main.bounds.width
     
+    let impactMed = UIImpactFeedbackGenerator(style: .medium)
+    
     var body: some View {
         let editMode = weightWatcher.platesEditMode
         HStack {
@@ -26,6 +28,7 @@ struct PlateView: View {
                 VStack {
                     if editMode {
                         Button {
+                            impactMed.impactOccurred()
                             weightWatcher.removePlate(plate)
                         } label: {
                             VStack {
@@ -37,6 +40,7 @@ struct PlateView: View {
                         }
                     } else {
                         Button {
+                            impactMed.impactOccurred()
                             weightWatcher.addPlateToActiveConfig(plate)
                         } label: {
                             VStack {
@@ -53,6 +57,7 @@ struct PlateView: View {
                                 .background(.white)
                             
                             Button {
+                                impactMed.impactOccurred()
                                 weightWatcher.addPlateToActiveConfig(plate, remove: true)
                             } label: {
                                 VStack {
@@ -71,7 +76,7 @@ struct PlateView: View {
             .tint(.white)
             .font(.title2)
 //            .fontWeight(.bold)
-            .frame(width: 28)
+            .frame(width: 35)
             .padding(.leading)
             
             VStack(alignment: .leading) {
