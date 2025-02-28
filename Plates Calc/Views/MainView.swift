@@ -14,6 +14,7 @@ struct MainView: View {
         NavigationStack {
             VStack {
                 WeightView(weight: weightWatcher.calculateWeightOfActiveConfig(), unit: weightWatcher.inventory.appUnit, isDumbbell: weightWatcher.inventory.configurations.last?.kind ?? ConfigKind.barbell == .dumbbell ? true : false)
+                    .padding(.bottom)
                 
                 ConfigView(weightWatcher: weightWatcher, config: weightWatcher.inventory.configurations.last)
                     .padding(.bottom)

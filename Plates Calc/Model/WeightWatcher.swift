@@ -66,6 +66,7 @@ class WeightWatcher: ObservableObject {
             weight = activeBar.weight
             unit = activeBar.unit
             color = activeBar.color
+            showEditSheet = true
         }
     }
     

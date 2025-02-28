@@ -84,6 +84,7 @@ struct BarView: View {
                     }
                     .rotationEffect(Angle(degrees: 180), anchor: .center)
                 }
+                .frame(height: screenWidth * 0.3)
             }
         }
     }

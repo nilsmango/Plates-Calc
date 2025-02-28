@@ -16,6 +16,13 @@ struct AddInventorySheet: View {
     @Binding var kind: ConfigKind
     var edit: Bool = false
     
+    let formatter: NumberFormatter = {
+        let f = NumberFormatter()
+        f.numberStyle = .decimal
+        f.maximumFractionDigits = 2
+        return f
+    }()
+    
     var body: some View {
         Form {
             Section(header: Text(addingBar ? "Configure Bar" : "Configure Plate")) {
@@ -31,7 +38,7 @@ struct AddInventorySheet: View {
                 HStack {
                     Text("Weight")
                     Spacer()
-                    TextField("Weight", value: $weight, formatter: NumberFormatter())
+                    TextField("Weight", value: $weight, formatter: formatter)
                         .keyboardType(.decimalPad)
                         .multilineTextAlignment(.trailing)
 
