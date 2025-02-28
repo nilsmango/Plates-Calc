@@ -14,6 +14,7 @@ struct AddInventorySheet: View {
     @Binding var color: Color
     @Binding var name: String
     @Binding var kind: ConfigKind
+    var edit: Bool = false
     
     var body: some View {
         Form {
@@ -46,7 +47,7 @@ struct AddInventorySheet: View {
                 ColorPicker("Color", selection: $color)
             }
         }
-        .navigationTitle(addingBar ? "New Bar" : "New Plate")
+        .navigationTitle(edit ? "Edit Bar" : addingBar ? "New Bar" : "New Plate")
         
 
     }

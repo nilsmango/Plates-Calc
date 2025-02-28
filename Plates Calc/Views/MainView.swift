@@ -10,12 +10,6 @@ import SwiftUI
 struct MainView: View {
     @ObservedObject var weightWatcher: WeightWatcher
     
-    @State private var weight: Double = 0
-    @State private var unit: Unit = .kg
-    @State private var color: Color = .black
-    @State private var name: String = ""
-    @State private var kind: ConfigKind = .dumbbell
-    
     var body: some View {
         NavigationStack {
             VStack {
@@ -30,44 +24,44 @@ struct MainView: View {
             }
             .padding()
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Menu {
-                        Section {
-                            Button {
-                                weightWatcher.showAddInventorySheetBar = true
-                                name = ""
-                            } label: {
-                                Label("Add Bar", systemImage: "plus")
-                            }
-                            
-                            Button {
-                                // todo only show if we have a bar
-                            } label: {
-                                Label("Edit active Bar", systemImage: "square.and.pencil")
-                            }
-                            
-                            Button(role: .destructive) {
-                                // todo only show if we have a bar
-                            } label: {
-                                Label("Remove active Bar", systemImage: "trash")
-                            }
-                            
+                
+                    
+                if weightWatcher.platesEditMode {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+                            weightWatcher.platesEditMode = false
+                        } label: {
+                            Text("Done")
                         }
+                            
                         
+                    }
+                    
+                } else {
+                    
+                    ToolbarItem(placement: .topBarTrailing) {
+                    Menu {
                         Section {
                             Button {
                                 weightWatcher.showAddInventorySheetPlate = true
                             } label: {
-                                Label("Add Plate", systemImage: "plus")
+                                Label("Add new Plate", systemImage: "plus")
                             }
                             
-                            Button {
-                                // todo only show if we have a plate, then go in edit mode with - in circle on top of plates
-                            } label: {
-                                Label("Edit Plates", systemImage: "square.and.pencil")
+                            if weightWatcher.inventory.plates.count > 0 {
+                                Button {
+                                    weightWatcher.platesEditMode = true
+                                } label: {
+                                    Label("Edit Plates", systemImage: "square.and.pencil")
+                                }
                             }
                         }
                         
+                        Section {
+                            BarSectionMenuButtons(weightWatcher: weightWatcher)
+                            
+                        }
+                                                
                         NavigationLink(destination: OptionsView(weightWatcher: weightWatcher)) {
                             Label("Options", systemImage: "ellipsis")
                         }
@@ -77,17 +71,17 @@ struct MainView: View {
                     }
                     
                 }
-                
+                }
             }
             .sheet(isPresented: $weightWatcher.showAddInventorySheetBar, content: {
                 NavigationStack {
-                    AddInventorySheet(addingBar: true, weight: $weight, unit: $unit, color: $color, name: $name, kind: $kind)
+                    AddInventorySheet(addingBar: true, weight: $weightWatcher.weight, unit: $weightWatcher.unit, color: $weightWatcher.color, name: $weightWatcher.name, kind: $weightWatcher.kind)
                         .toolbar {
                             ToolbarItem(placement: .topBarLeading) {
                                 Button {
                                     weightWatcher.showAddInventorySheetBar = false
-                                    weight = 0
-                                    name = ""
+                                    weightWatcher.weight = 1
+                                    weightWatcher.name = ""
                                 } label: {
                                     Text("Cancel")
                                         .tint(.red)
@@ -96,9 +90,9 @@ struct MainView: View {
                             ToolbarItem(placement: .topBarTrailing) {
                                 Button {
                                     weightWatcher.showAddInventorySheetBar = false
-                                    weightWatcher.addBarToConfigs(Bar(id: UUID(), kind: kind, name: name, weight: weight, unit: unit, color: color, weights: [:]))
-                                    weight = 0
-                                    name = ""
+                                    weightWatcher.addBarToConfigs()
+                                    weightWatcher.weight = 1
+                                    weightWatcher.name = ""
                                 } label: {
                                     Text("Save")
                                 }
@@ -110,12 +104,12 @@ struct MainView: View {
             
             .sheet(isPresented: $weightWatcher.showAddInventorySheetPlate, content: {
                 NavigationStack {
-                    AddInventorySheet(addingBar: false, weight: $weight, unit: $unit, color: $color, name: $name, kind: $kind)
+                    AddInventorySheet(addingBar: false, weight: $weightWatcher.weight, unit: $weightWatcher.unit, color: $weightWatcher.color, name: $weightWatcher.name, kind: $weightWatcher.kind)
                         .toolbar {
                             ToolbarItem(placement: .topBarLeading) {
                                 Button {
                                     weightWatcher.showAddInventorySheetPlate = false
-                                    weight = 0
+                                    weightWatcher.weight = 1
                                 } label: {
                                     Text("Cancel")
                                         .tint(.red)
@@ -124,8 +118,8 @@ struct MainView: View {
                             ToolbarItem(placement: .topBarTrailing) {
                                 Button {
                                     weightWatcher.showAddInventorySheetPlate = false
-                                    weightWatcher.addNewPlate(Plate(id: UUID(), weight: weight, unit: unit, color: color))
-                                    weight = 0
+                                    weightWatcher.addNewPlate()
+                                    weightWatcher.weight = 1
                                 } label: {
                                     Text("Save")
                                 }
@@ -134,6 +128,34 @@ struct MainView: View {
                 }
             }
             )
+            
+            .sheet(isPresented: $weightWatcher.showEditSheet) {
+                NavigationStack {
+                    AddInventorySheet(addingBar: true, weight: $weightWatcher.weight, unit: $weightWatcher.unit, color: $weightWatcher.color, name: $weightWatcher.name, kind: $weightWatcher.kind, edit: true)
+                        .toolbar {
+                            ToolbarItem(placement: .topBarLeading) {
+                                Button {
+                                    weightWatcher.showEditSheet = false
+                                    weightWatcher.weight = 1
+                                    weightWatcher.name = ""
+                                } label: {
+                                    Text("Cancel")
+                                        .tint(.red)
+                                }
+                            }
+                            ToolbarItem(placement: .topBarTrailing) {
+                                Button {
+                                    weightWatcher.showEditSheet = false
+                                    weightWatcher.editActiveBar()
+                                    weightWatcher.weight = 1
+                                    weightWatcher.name = ""
+                                } label: {
+                                    Text("Save")
+                                }
+                            }
+                        }
+                }
+            }
         }
         
     }

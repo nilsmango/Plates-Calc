@@ -33,25 +33,28 @@ struct PlatesView: View {
                     Label("Add Plate", systemImage: "plus.circle.fill")
                 }
                 .buttonStyle(.borderedProminent)
+                
+                Spacer()
             }
             
             
         } else {
             
-        
-        LazyVGrid(columns: columns, spacing: 0) {
-            ForEach(plates.sorted {
-                if config.weights.keys.contains($0) != config.weights.keys.contains($1) {
-                        return config.weights.keys.contains($0)
+            ScrollView {
+                LazyVGrid(columns: columns, spacing: 0) {
+                    ForEach(plates.sorted {
+                        if config.weights.keys.contains($0) != config.weights.keys.contains($1) {
+                            return config.weights.keys.contains($0)
+                        }
+                        return $0.unit == $1.unit ? $0.weight > $1.weight : $0.unit.rawValue < $1.unit.rawValue
+                    }, id: \.id) { plate in
+                        let amount = config.weights[plate] ?? 0
+                        PlateView(weightWatcher: weightWatcher, amount: amount, plate: plate)
                     }
-                    return $0.unit == $1.unit ? $0.weight > $1.weight : $0.unit.rawValue < $1.unit.rawValue
-            }, id: \.id) { plate in
-                let amount = config.weights[plate] ?? 0
-                PlateView(weightWatcher: weightWatcher, amount: amount, plate: plate)
-                    }
-            
+                    
                 }
                 .padding()
+            }
         }
     }
 }

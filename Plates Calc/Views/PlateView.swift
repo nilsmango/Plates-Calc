@@ -9,43 +9,61 @@ import SwiftUI
 
 struct PlateView: View {
     @ObservedObject var weightWatcher: WeightWatcher
+    
     let amount: Int
     let plate: Plate
     
     let width = UIScreen.main.bounds.width
     
     var body: some View {
+        let editMode = weightWatcher.platesEditMode
         HStack {
             ZStack {
+                
                 RoundedRectangle(cornerRadius: weightWatcher.platesCornerRadius)
-                    .fill(plate.color)
+                    .fill(editMode ? .red : plate.color)
+                    .modifier(JiggleModifier(isActive: editMode))
                 VStack {
-                    Button {
-                        weightWatcher.addPlateToActiveConfig(plate)
-                    } label: {
-                        VStack {
-                            Spacer()
-                            Text("+")
-                            Spacer()
-                        }
-                        .contentShape(Rectangle())
-                    }
-                    
-                    if amount > 0 {
-                        Divider()
-                            .frame(height: 1)
-                            .background(.white)
-                        
+                    if editMode {
                         Button {
-                            weightWatcher.addPlateToActiveConfig(plate, remove: true)
+                            weightWatcher.removePlate(plate)
                         } label: {
                             VStack {
                                 Spacer()
-                                Text("-")
+                                Image(systemName: "trash")
                                 Spacer()
                             }
                             .contentShape(Rectangle())
                         }
+                    } else {
+                        Button {
+                            weightWatcher.addPlateToActiveConfig(plate)
+                        } label: {
+                            VStack {
+                                Spacer()
+                                Text("+")
+                                Spacer()
+                            }
+                            .contentShape(Rectangle())
+                        }
+                        
+                        if amount > 0 {
+                            Divider()
+                                .frame(height: 1)
+                                .background(.white)
+                            
+                            Button {
+                                weightWatcher.addPlateToActiveConfig(plate, remove: true)
+                            } label: {
+                                VStack {
+                                    Spacer()
+                                    Text("-")
+                                    Spacer()
+                                }
+                                .contentShape(Rectangle())
+                            }
+                        }
+                        
                     }
                     
                 }
@@ -58,8 +76,9 @@ struct PlateView: View {
             
             VStack(alignment: .leading) {
                     Text("\(amount) x")
+                    .modifier(JiggleModifier(isActive: editMode))
                 Text("\(plate.weight) \(plate.unit)")
-                
+                    .modifier(JiggleModifier(isActive: editMode))
             }
             .monospacedDigit()
             .font(.title2)

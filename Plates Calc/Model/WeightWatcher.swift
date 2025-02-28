@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUICore
 
 /// Last of configs is the active bar
 class WeightWatcher: ObservableObject {
@@ -35,29 +36,72 @@ class WeightWatcher: ObservableObject {
     }
     
     // MARK: - Bars
+    // MARK: Last of configs is active bar
     
-    func addBarToConfigs(_ bar: Bar) {
+    func addBarToConfigs() {
+        let bar = Bar(id: UUID(), kind: kind, name: name, weight: weight, unit: unit, color: color, weights: [:])
         inventory.configurations.append(bar)
         saveInventoryToDisk()
     }
     
-    func removeBarFromConfigs(_ bar: Bar) {
-        inventory.configurations.removeAll { $0.id == bar.id }
+    func removeActiveBar() {
+        if !inventory.configurations.isEmpty {
+            inventory.configurations.removeLast()
+            saveInventoryToDisk()
+        }
+    }
+    
+    func makeBarActiveConfig(_ bar: Bar) {
+        if let index = inventory.configurations.firstIndex(of: bar) {
+            inventory.configurations.remove(at: index)
+            inventory.configurations.append(bar)
+        }
         saveInventoryToDisk()
     }
     
+    func showEditActiveBarSheet() {
+        if let activeBar = inventory.configurations.last {
+            kind = activeBar.kind
+            name = activeBar.name
+            weight = activeBar.weight
+            unit = activeBar.unit
+            color = activeBar.color
+        }
+    }
+    
+    func editActiveBar() {
+        if let oldBar = inventory.configurations.last {
+            let newBar = Bar(id: oldBar.id, kind: kind, name: name, weight: weight, unit: unit, color: color, weights: [:])
+            inventory.configurations.removeLast()
+            inventory.configurations.append(newBar)
+            saveInventoryToDisk()
+        }
+    }
     
     // MARK: - Plates
     
     let platesCornerRadius = 8.0
     
-    func addNewPlate(_ plate: Plate) {
+    @Published var platesEditMode = false
+    
+    func addNewPlate() {
+        let plate = Plate(id: UUID(), weight: weight, unit: unit, color: color)
         inventory.plates.append(plate)
         saveInventoryToDisk()
     }
     
     func removePlate(_ plate: Plate) {
         inventory.plates.removeAll { $0.id == plate.id }
+        for (i, config) in inventory.configurations.enumerated() {
+            if config.weights.keys.contains(plate) {
+                var updatedConfig = config
+                updatedConfig.weights.removeValue(forKey: plate)
+                inventory.configurations[i] = updatedConfig
+            }
+        }
+        if inventory.plates.isEmpty {
+            platesEditMode = false
+        }
         saveInventoryToDisk()
     }
     
@@ -85,7 +129,7 @@ class WeightWatcher: ObservableObject {
         saveInventoryToDisk()
     }
     
-    // MARK: - Weight
+    // MARK: - Total Weight
     
     /// returns weight of config in the app unit
     func calculateWeightOfActiveConfig() -> Double {
@@ -119,5 +163,11 @@ class WeightWatcher: ObservableObject {
     
     @Published var showAddInventorySheetBar = false
     @Published var showAddInventorySheetPlate = false
+    @Published var showEditSheet = false
     
+    @Published var weight: Double = 1
+    @Published var unit: Unit = .kg
+    @Published var color: Color = .black
+    @Published var name: String = ""
+    @Published var kind: ConfigKind = .dumbbell
 }

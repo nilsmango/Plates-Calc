@@ -15,29 +15,33 @@ struct ConfigView: View {
     
     var body: some View {
         if let config = config {
-            HStack {
-                
-                Spacer(minLength: 0)
-                
-                BarView(config: config)
-                
-                Spacer(minLength: 0)
-                
-                VStack(alignment: .leading) {
-                    Text("\(config.name)")
-                    Text("\(config.weight) \(config.unit)")
+            Menu {
+                BarSectionMenuButtons(weightWatcher: weightWatcher)
+            } label: {
+                HStack {
+                    
+                    Spacer(minLength: 0)
+                    
+                    BarView(config: config)
+                    
+                    Spacer(minLength: 0)
+                    
+                    VStack(alignment: .leading) {
+                        Text("\(config.name)")
+                        Text("\(config.weight) \(config.unit)")
+                    }
+                    .font(.title2)
+                    .fontWeight(.bold)
+                    .fontDesign(.rounded)
+                    .padding(.leading, 8)
+                    
+                    Spacer(minLength: 0)
                 }
-                .font(.title2)
-                .fontWeight(.bold)
-                .fontDesign(.rounded)
-                .padding(.leading, 8)
-                
-                Spacer(minLength: 0)
+                .contentShape(Rectangle())
             }
-            .contentShape(Rectangle())
-            .onTapGesture {
-                print("change (if more than one saved), add or edit bar")
-            }
+            .tint(.primary)
+            
+            
             
                 
         } else {

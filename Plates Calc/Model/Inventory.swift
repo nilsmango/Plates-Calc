@@ -10,13 +10,11 @@ import SwiftUICore
 
 /// Complete inventory of bars, plates and the configurations
 struct Inventory: Codable {
-    var bars: [Bar]
     var plates: [Plate]
     var configurations: [Bar]
     var appUnit: Unit
     
     init() {
-        bars = []
         plates = []
         configurations = []
         appUnit = .kg
@@ -33,7 +31,7 @@ struct Plate: Hashable, Codable {
 }
 
 /// Inventory of bars
-struct Bar: Codable {
+struct Bar: Hashable, Codable {
     let id: UUID
     let kind: ConfigKind
     var name: String
