@@ -105,6 +105,13 @@ class WeightWatcher: ObservableObject {
         saveInventoryToDisk()
     }
     
+    func removeAllPlates() {
+        if inventory.configurations.isEmpty { return }
+        let index = inventory.configurations.count - 1
+        inventory.configurations[index].weights.removeAll()
+        saveInventoryToDisk()
+    }
+    
     func editMaxAmount(for plate: Plate, maxAmount: Int?) {
         if let index = inventory.plates.firstIndex(where: { $0.id == plate.id }) {
             inventory.plates[index].maxAmount = maxAmount

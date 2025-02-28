@@ -34,6 +34,11 @@ struct BarSectionMenuButtons: View {
         }
         
         if weightWatcher.inventory.configurations.count > 0 {
+            Button {
+                weightWatcher.removeAllPlates()
+            } label: {
+                Label("Empty active Bar", systemImage: "xmark")
+            }
             
         Button {
             weightWatcher.showEditActiveBarSheet()

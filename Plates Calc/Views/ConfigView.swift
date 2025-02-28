@@ -41,9 +41,6 @@ struct ConfigView: View {
             }
             .tint(.primary)
             
-            
-            
-                
         } else {
             VStack {
                 Text("Add a Bar to see it here.")
