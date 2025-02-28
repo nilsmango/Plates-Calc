@@ -22,11 +22,14 @@ struct BarSectionMenuButtons: View {
             
             Menu {
                 ForEach(weightWatcher.inventory.configurations, id: \.self) { bar in
-                    Button {
-                        weightWatcher.makeBarActiveConfig(bar)
-                    } label: {
-                        Text(bar.name)
+                    if weightWatcher.inventory.configurations.last != bar {
+                        Button {
+                            weightWatcher.makeBarActiveConfig(bar)
+                        } label: {
+                            Text(bar.name)
+                        }
                     }
+                    
                 }
             } label: {
                 Label("Switch active Bar", systemImage: "square.and.pencil")
