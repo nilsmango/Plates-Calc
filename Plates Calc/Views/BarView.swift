@@ -33,11 +33,19 @@ struct BarView: View {
         ZStack {
             if config.kind == .kettlebell {
                 // Kettlebell implementation
-                VStack(spacing: plateSpacing * 3) {
+                VStack(spacing: plateSpacing * 2) {
                     // Handle
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(config.color, lineWidth: plateWidth(for: 2))
-                                .frame(width: screenWidth * 0.15, height: screenWidth * 0.17)
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(config.color)
+                            .stroke(config.color == .black || config.color == .white ? makeContrastColor(for: config.color) : .clear, lineWidth: 1)
+                                    .frame(width: screenWidth * 0.17, height: screenWidth * 0.19)
+                        RoundedRectangle(cornerRadius: 5)
+                            .fill(.background)
+                            .stroke(config.color == .black || config.color == .white ? makeContrastColor(for: config.color) : .clear, lineWidth: 1)
+                                    .frame(width: screenWidth * 0.11, height: screenWidth * 0.13)
+                    }
+                    
                     
                     // Bell
                     VStack(spacing: plateSpacing) {
@@ -45,6 +53,7 @@ struct BarView: View {
                             ForEach(0..<((config.weights[plate] ?? 0) / 2), id: \.self) { _ in
                                 RoundedRectangle(cornerRadius: 4)
                                     .fill(plate.color)
+                                    .stroke(plate.color == .black || plate.color == .white ? makeContrastColor(for: plate.color) : .clear, lineWidth: 1)
                                     .frame(width: screenWidth * 0.3, height: plateWidth(for: plate.weight))
                             }
                         }
@@ -54,16 +63,18 @@ struct BarView: View {
                 // Bar
                 Rectangle()
                     .fill(config.color)
+                    .stroke(config.color == .black || config.color == .white ? makeContrastColor(for: config.color) : .clear, lineWidth: 1)
                     .frame(width: barWidth, height: screenWidth * heightRatio)
                 
                 // Plates
-                HStack(spacing: plateSpacing) {
+                HStack(spacing: plateSpacing * 2) {
                     // Left plates
                     HStack(spacing: plateSpacing) {
                         ForEach(Array(config.weights.keys), id: \.id) { plate in
                             ForEach(0..<((config.weights[plate] ?? 0) / 2), id: \.self) { _ in
                                 RoundedRectangle(cornerRadius: 4)
                                     .fill(plate.color)
+                                    .stroke(plate.color == .black || plate.color == .white ? makeContrastColor(for: plate.color) : .clear, lineWidth: 1)
                                     .frame(width: plateWidth(for: plate.weight), height: screenWidth * 0.3)
                             }
                         }
@@ -78,6 +89,7 @@ struct BarView: View {
                             ForEach(0..<((config.weights[plate] ?? 0) / 2), id: \.self) { _ in
                                 RoundedRectangle(cornerRadius: 4)
                                     .fill(plate.color)
+                                    .stroke(plate.color == .black || plate.color == .white ? makeContrastColor(for: plate.color) : .clear, lineWidth: 1)
                                     .frame(width: plateWidth(for: plate.weight), height: screenWidth * 0.3)
                             }
                         }
@@ -108,5 +120,5 @@ struct KettlebellHandle: Shape {
 }
 
 #Preview {
-    BarView(config: Bar(id: UUID(), kind: .kettlebell, name: "Ironmaster", weight: 3.2, unit: .kg, color: .gray, weights: [Plate(id: UUID(), weight: 5, unit: .lb, color: .black) : 6, Plate(id: UUID(), weight: 2, unit: .lb, color: .black) : 4]))
+    BarView(config: Bar(id: UUID(), kind: .barbell, name: "Ironmaster", weight: 3.2, unit: .kg, color: .gray, weights: [Plate(id: UUID(), weight: 5, unit: .lb, color: .black) : 6, Plate(id: UUID(), weight: 2, unit: .lb, color: .black) : 4]))
 }

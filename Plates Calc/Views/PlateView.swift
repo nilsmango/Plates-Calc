@@ -14,8 +14,11 @@ struct PlateView: View {
     let plate: Plate
     
     let width = UIScreen.main.bounds.width
-    
     let impactMed = UIImpactFeedbackGenerator(style: .medium)
+    
+    var contrastColor: Color {
+        makeContrastColor(for: plate.color)
+    }
     
     var body: some View {
         let editMode = weightWatcher.platesEditMode
@@ -24,6 +27,7 @@ struct PlateView: View {
                 
                 RoundedRectangle(cornerRadius: weightWatcher.platesCornerRadius)
                     .fill(editMode ? .red : plate.color)
+                    .stroke((plate.color != .black && plate.color != .white) || editMode ? .clear : contrastColor, lineWidth: 1)
                     .modifier(JiggleModifier(isActive: editMode))
                 VStack {
                     if editMode {
@@ -49,12 +53,14 @@ struct PlateView: View {
                                 Spacer()
                             }
                             .contentShape(Rectangle())
+                            .foregroundStyle(contrastColor)
+                            
                         }
                         
                         if amount > 0 {
                             Divider()
                                 .frame(height: 1)
-                                .background(.white)
+                                .background(contrastColor)
                             
                             Button {
                                 impactMed.impactOccurred()
@@ -66,17 +72,17 @@ struct PlateView: View {
                                     Spacer()
                                 }
                                 .contentShape(Rectangle())
+                                .foregroundStyle(contrastColor)
+                                
                             }
                         }
-                        
                     }
-                    
                 }
             }
             .tint(.white)
             .font(.title2)
 //            .fontWeight(.bold)
-            .frame(width: 35)
+            .frame(width: 40)
             .padding(.leading)
             
             VStack(alignment: .leading) {
@@ -90,7 +96,6 @@ struct PlateView: View {
             .fontWeight(.bold)
             .padding(.leading, 8)
             
-            
             Spacer(minLength: 0.0)
                         
         }
@@ -101,5 +106,5 @@ struct PlateView: View {
 }
 
 #Preview {
-    PlateView(weightWatcher: WeightWatcher(), amount: 2, plate: Plate(id: UUID(), weight: 23, unit: .lb, color: .black))
+    PlateView(weightWatcher: WeightWatcher(), amount: 2, plate: Plate(id: UUID(), weight: 23, unit: .lb, color: .indigo))
 }
