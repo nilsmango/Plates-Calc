@@ -68,7 +68,7 @@ struct MainView: View {
                         }
                         
                     } label: {
-                        Label("Options", systemImage: "ellipsis.circle.fill")
+                        Label("Settings", systemImage: "ellipsis.circle.fill")
                     }
                     
                 }

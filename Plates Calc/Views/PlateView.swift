@@ -99,7 +99,7 @@ struct PlateView: View {
             Spacer(minLength: 0.0)
                         
         }
-        .frame(width: width/2, height: width/4)
+        .frame(width: width/2, height: 120)
         .padding(.vertical)
         .fontDesign(.rounded)
     }
