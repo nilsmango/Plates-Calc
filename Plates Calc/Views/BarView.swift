@@ -13,6 +13,9 @@ struct BarView: View {
     let widthRatioBarbell = 0.9
     let widthRatioDumbbell = 0.2
     let heightRatio = 0.05
+    let plateCornerRadius: Double
+    
+    @State private var scaleRatio = 1.0
     
     private var barWidth: CGFloat {
         screenWidth * widthRatioDumbbell
@@ -23,10 +26,45 @@ struct BarView: View {
     }
     
     private func plateWidth(for weight: Double) -> CGFloat {
-        // Scale plate width based on weight
-//        let baseWidth = screenWidth * 0.03
-//        return baseWidth * (weight / 2.5) // 2.5 as baseline weight
-        return screenWidth * 0.03
+        // Get all unique weights and sort them
+        let allWeights = config.weights.filter { $0.value > 0 }.map { $0.key.weight }.sorted()
+        
+        guard !allWeights.isEmpty else { return screenWidth * 0.03 }
+        
+        // Find the index of the current weight
+        guard let weightIndex = allWeights.firstIndex(of: weight) else {
+            return screenWidth * 0.03
+        }
+        
+        let minWidth = screenWidth * 0.03
+        let maxSideWidth = screenWidth - (barWidth * 2)
+        
+        // Calculate total plates width for one side (including spacing)
+        var totalPlatesWidth: CGFloat = 0
+        for plate in config.weights.keys {
+            let plateCount = (config.weights[plate] ?? 0) / 2  // Plates per side
+            if plateCount > 0 {
+                totalPlatesWidth += CGFloat(plateCount) * minWidth + CGFloat(plateCount - 1) * plateSpacing
+            }
+        }
+        
+        // If we have only one weight type, use more of the available space
+        if allWeights.count == 1 {
+            let maxWidth = max(minWidth, maxSideWidth / CGFloat(config.weights.values.first! / 2))
+            return min(maxWidth, minWidth * 1.5)
+        }
+        
+        // Calculate scaling factor based on available space
+        let availableWidth = maxSideWidth
+        let scalingFactor = min(1.3, availableWidth / totalPlatesWidth)
+        
+        // Create width multiplier based on weight index (lightest = 1x, each heavier = up to 2x)
+        let multiplier = 1.0 + (Double(weightIndex) / Double(allWeights.count - 1))
+        
+        // Apply scaling while respecting constraints
+        let scaledWidth = minWidth * CGFloat(multiplier) * scalingFactor
+        
+        return max(scaledWidth, minWidth)
     }
     
     var body: some View {
@@ -51,7 +89,7 @@ struct BarView: View {
                     VStack(spacing: plateSpacing) {
                         ForEach(Array(config.weights.keys), id: \.id) { plate in
                             ForEach(0..<((config.weights[plate] ?? 0) / 2), id: \.self) { _ in
-                                RoundedRectangle(cornerRadius: 4)
+                                RoundedRectangle(cornerRadius: plateCornerRadius)
                                     .fill(plate.color)
                                     .stroke(plate.color == .black || plate.color == .white ? makeContrastColor(for: plate.color) : .clear, lineWidth: 1)
                                     .frame(width: screenWidth * 0.3, height: plateWidth(for: plate.weight))
@@ -60,43 +98,63 @@ struct BarView: View {
                     }
                 }
             } else {
-                // Bar
-                Rectangle()
-                    .fill(config.color)
-                    .stroke(config.color == .black || config.color == .white ? makeContrastColor(for: config.color) : .clear, lineWidth: 1)
-                    .frame(width: barWidth, height: screenWidth * heightRatio)
-                
-                // Plates
-                HStack(spacing: plateSpacing * 2) {
-                    // Left plates
-                    HStack(spacing: plateSpacing) {
-                        ForEach(Array(config.weights.keys), id: \.id) { plate in
-                            ForEach(0..<((config.weights[plate] ?? 0) / 2), id: \.self) { _ in
-                                RoundedRectangle(cornerRadius: 4)
-                                    .fill(plate.color)
-                                    .stroke(plate.color == .black || plate.color == .white ? makeContrastColor(for: plate.color) : .clear, lineWidth: 1)
-                                    .frame(width: plateWidth(for: plate.weight), height: screenWidth * 0.3)
+                Group {
+                    // Bar
+                    RoundedRectangle(cornerRadius: plateCornerRadius/2)
+                        .fill(config.color)
+                        .stroke(config.color == .black || config.color == .white ? makeContrastColor(for: config.color) : .clear, lineWidth: 1)
+                        .frame(width: barWidth, height: screenWidth * heightRatio)
+                    
+                    // Plates
+                    HStack(spacing: plateSpacing * 2) {
+                        // Left plates
+                        HStack(spacing: plateSpacing) {
+                            ForEach(Array(config.weights.keys), id: \.id) { plate in
+                                ForEach(0..<((config.weights[plate] ?? 0) / 2), id: \.self) { _ in
+                                    RoundedRectangle(cornerRadius: plateCornerRadius)
+                                        .fill(plate.color)
+                                        .stroke(plate.color == .black || plate.color == .white ? makeContrastColor(for: plate.color) : .clear, lineWidth: 1)
+                                        .frame(width: plateWidth(for: plate.weight), height: screenWidth * 0.3)
+                                }
                             }
                         }
-                    }
-                    
-                    Spacer()
-                        .frame(width: barWidth)
-                    
-                    // Right plates (mirrored)
-                    HStack(spacing: plateSpacing) {
-                        ForEach(Array(config.weights.keys), id: \.id) { plate in
-                            ForEach(0..<((config.weights[plate] ?? 0) / 2), id: \.self) { _ in
-                                RoundedRectangle(cornerRadius: 4)
-                                    .fill(plate.color)
-                                    .stroke(plate.color == .black || plate.color == .white ? makeContrastColor(for: plate.color) : .clear, lineWidth: 1)
-                                    .frame(width: plateWidth(for: plate.weight), height: screenWidth * 0.3)
+                        
+                        Spacer()
+                            .frame(width: barWidth)
+                        
+                        // Right plates (mirrored)
+                        HStack(spacing: plateSpacing) {
+                            ForEach(Array(config.weights.keys), id: \.id) { plate in
+                                ForEach(0..<((config.weights[plate] ?? 0) / 2), id: \.self) { _ in
+                                    RoundedRectangle(cornerRadius: plateCornerRadius)
+                                        .fill(plate.color)
+                                        .stroke(plate.color == .black || plate.color == .white ? makeContrastColor(for: plate.color) : .clear, lineWidth: 1)
+                                        .frame(width: plateWidth(for: plate.weight), height: screenWidth * 0.3)
+                                }
                             }
                         }
+                        .rotationEffect(Angle(degrees: 180), anchor: .center)
                     }
-                    .rotationEffect(Angle(degrees: 180), anchor: .center)
+                    .frame(height: screenWidth * 0.3)
                 }
-                .frame(height: screenWidth * 0.3)
+                .scaleEffect(x: scaleRatio, y: 1, anchor: .center)
+                .background {
+                    GeometryReader { geometry in
+                        Rectangle()
+                            .fill(.clear)
+                            .onAppear {
+                                if geometry.size.width > screenWidth * 2.0 * 0.9 {
+                                    scaleRatio = (screenWidth * 2.0 * 0.9) / geometry.size.width
+                                }
+                            }
+                            .onChange(of: geometry.size.width) {
+                                if geometry.size.width > screenWidth * 2.0 * 0.9 {
+                                    scaleRatio = (screenWidth * 2.0 * 0.9) / geometry.size.width
+                                }
+                            }
+                    }
+                }
+                
             }
         }
     }
@@ -120,5 +178,5 @@ struct KettlebellHandle: Shape {
 }
 
 #Preview {
-    BarView(config: Bar(id: UUID(), kind: .barbell, name: "Ironmaster", weight: 3.2, unit: .kg, color: .gray, weights: [Plate(id: UUID(), weight: 5, unit: .lb, color: .black) : 6, Plate(id: UUID(), weight: 2, unit: .lb, color: .black) : 4]))
+    BarView(config: Bar(id: UUID(), kind: .dumbbell, name: "Ironmaster", weight: 3.2, unit: .kg, color: .gray, weights: [Plate(id: UUID(), weight: 5, unit: .lb, color: .black) : 6, Plate(id: UUID(), weight: 2, unit: .lb, color: .black) : 4]), plateCornerRadius: 2.0)
 }
