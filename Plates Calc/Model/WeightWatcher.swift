@@ -81,7 +81,7 @@ class WeightWatcher: ObservableObject {
     
     // MARK: - Plates
     
-    let platesCornerRadius = 8.0
+    let platesCornerRadius = 2.0
     
     @Published var platesEditMode = false
     
