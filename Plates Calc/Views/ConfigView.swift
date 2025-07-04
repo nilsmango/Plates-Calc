@@ -18,23 +18,16 @@ struct ConfigView: View {
             Menu {
                 BarSectionMenuButtons(weightWatcher: weightWatcher)
             } label: {
-                HStack {
-                    Spacer(minLength: 0)
+                VStack {
                     
-                    BarView(config: config)
+                    BarView(config: config, plateCornerRadius: weightWatcher.platesCornerRadius)
                     
-                    Spacer(minLength: 0)
+                    Text("\(config.name): \(config.weight) \(config.unit)")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .fontDesign(.rounded)
+                        .padding(.top, 8)
                     
-                    VStack(alignment: .leading) {
-                        Text("\(config.name)")
-                        Text("\(config.weight) \(config.unit)")
-                    }
-                    .font(.title2)
-                    .fontWeight(.bold)
-                    .fontDesign(.rounded)
-                    .padding(.leading, 8)
-                    
-                    Spacer(minLength: 0)
                 }
                 .contentShape(Rectangle())
             }
