@@ -88,7 +88,7 @@ struct BarView: View {
                     // Bell
                     VStack(spacing: plateSpacing) {
                         ForEach(Array(config.weights.keys), id: \.id) { plate in
-                            ForEach(0..<((config.weights[plate] ?? 0) / 2), id: \.self) { _ in
+                            ForEach(0..<((config.weights[plate] ?? 0)), id: \.self) { _ in
                                 RoundedRectangle(cornerRadius: plateCornerRadius)
                                     .fill(plate.color)
                                     .stroke(plate.color == .black || plate.color == .white ? makeContrastColor(for: plate.color) : .clear, lineWidth: 1)
