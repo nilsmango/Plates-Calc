@@ -12,6 +12,7 @@ struct PlateView: View {
     
     let amount: Int
     let plate: Plate
+    let kind: ConfigKind
     
     let width = UIScreen.main.bounds.width
     let impactMed = UIImpactFeedbackGenerator(style: .medium)
@@ -24,11 +25,11 @@ struct PlateView: View {
         let editMode = weightWatcher.platesEditMode
         HStack {
             ZStack {
-                
-                RoundedRectangle(cornerRadius: weightWatcher.platesCornerRadius)
+                RoundedRectangle(cornerRadius: weightWatcher.platesCornerRadius * 2)
                     .fill(editMode ? .red : plate.color)
                     .stroke((plate.color != .black && plate.color != .white) || editMode ? .clear : contrastColor, lineWidth: 1)
                     .modifier(JiggleModifier(isActive: editMode))
+                
                 VStack {
                     if editMode {
                         Button {
@@ -86,10 +87,24 @@ struct PlateView: View {
             .padding(.leading)
             
             VStack(alignment: .leading) {
+                if kind == .kettlebell {
                     Text("\(amount) x")
-                    .modifier(JiggleModifier(isActive: editMode))
+                        .modifier(JiggleModifier(isActive: editMode))
+                } else {
+                    let pairAmount = amount/2
+                    if pairAmount == 1 {
+                        Text("\(pairAmount) pair x")
+                            .modifier(JiggleModifier(isActive: editMode))
+                    } else {
+                        Text("\(pairAmount) pairs x")
+                            .modifier(JiggleModifier(isActive: editMode))
+                    }
+                    
+                }
+                
                 Text("\(plate.weight) \(plate.unit)")
                     .modifier(JiggleModifier(isActive: editMode))
+                
             }
             .monospacedDigit()
             .font(.title2)
@@ -106,5 +121,5 @@ struct PlateView: View {
 }
 
 #Preview {
-    PlateView(weightWatcher: WeightWatcher(), amount: 2, plate: Plate(id: UUID(), weight: 23, unit: .lb, color: .indigo))
+    PlateView(weightWatcher: WeightWatcher(), amount: 2, plate: Plate(id: UUID(), weight: 23, unit: .lb, color: .indigo), kind: .dumbbell)
 }
