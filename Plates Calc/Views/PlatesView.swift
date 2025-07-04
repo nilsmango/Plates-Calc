@@ -15,9 +15,9 @@ struct PlatesView: View {
     let plates: [Plate]
     
     let columns = [
-            GridItem(.flexible()),
-            GridItem(.flexible())
-        ]
+        GridItem(.fixed(UIScreen.main.bounds.width / 2.2)),
+        GridItem(.fixed(UIScreen.main.bounds.width / 2.2))
+    ]
     
 
     var body: some View {
@@ -39,7 +39,6 @@ struct PlatesView: View {
             
             
         } else {
-            
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 0) {
                     ForEach(plates.sorted {
@@ -49,7 +48,7 @@ struct PlatesView: View {
                         return $0.unit == $1.unit ? $0.weight > $1.weight : $0.unit.rawValue < $1.unit.rawValue
                     }, id: \.id) { plate in
                         let amount = config.weights[plate] ?? 0
-                        PlateView(weightWatcher: weightWatcher, amount: amount, plate: plate)
+                        PlateView(weightWatcher: weightWatcher, amount: amount, plate: plate, kind: config.kind)
                     }
                     
                 }
