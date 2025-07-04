@@ -32,7 +32,7 @@ struct BarSectionMenuButtons: View {
                     
                 }
             } label: {
-                Label("Switch active Bar", systemImage: "square.and.pencil")
+                Label("Switch active Bar", systemImage: "arrow.2.squarepath")
             }
         }
         
