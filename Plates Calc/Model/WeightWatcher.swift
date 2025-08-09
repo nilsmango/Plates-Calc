@@ -72,7 +72,7 @@ class WeightWatcher: ObservableObject {
     
     func editActiveBar() {
         if let oldBar = inventory.configurations.last {
-            let newBar = Bar(id: oldBar.id, kind: kind, name: name, weight: weight, unit: unit, color: color, weights: [:])
+            let newBar = Bar(id: oldBar.id, kind: kind, name: name, weight: weight, unit: unit, color: color, weights: oldBar.weights)
             inventory.configurations.removeLast()
             inventory.configurations.append(newBar)
             saveInventoryToDisk()

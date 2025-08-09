@@ -64,7 +64,7 @@ struct MainView: View {
                         }
                                                 
                         NavigationLink(destination: OptionsView(weightWatcher: weightWatcher)) {
-                            Label("Options", systemImage: "ellipsis")
+                            Label("Options & Info", systemImage: "ellipsis")
                         }
                         
                     } label: {
