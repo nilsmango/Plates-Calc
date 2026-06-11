@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import SwiftUICore
+import SwiftUI
 
 /// Last of configs is the active bar
 class WeightWatcher: ObservableObject {

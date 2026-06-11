@@ -22,7 +22,7 @@ struct ConfigView: View {
                     
                     BarView(config: config, plateCornerRadius: weightWatcher.platesCornerRadius)
                     
-                    Text("\(config.name): \(config.weight) \(config.unit)")
+                    Text("\(config.name): \(config.weight.cleanWeight) \(config.unit)")
                         .font(.title2)
                         .fontWeight(.bold)
                         .fontDesign(.rounded)

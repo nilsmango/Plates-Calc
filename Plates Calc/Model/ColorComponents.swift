@@ -5,7 +5,7 @@
 //  Created by Simon Lang on 24.02.2025.
 //import SwiftUI
 
-import SwiftUICore
+import SwiftUI
 import UIKit
 
 extension Color: Codable {

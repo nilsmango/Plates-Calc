@@ -50,7 +50,7 @@ struct OptionsView: View {
             }
             
             Section {
-                Text("**Contact**\nSend us an [email](hi@project7iii.com) to ask for support, report bugs, or send suggestions.")
+                Text("**Contact**\nSend us an [email](7+plates@project7iii.com) to ask for support, report bugs, or send suggestions.")
                 Text("**Privacy Policy**\nThis app does not collect any data or track anything. Everything gets saved on your device only.")
                 Text("**Support Us**\nCheck out our [other Apps](https://project7iii.com/apps/)!")
             } header: {

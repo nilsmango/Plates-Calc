@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import SwiftUICore
+import SwiftUI
 
 /// Complete inventory of bars, plates and the configurations
 struct Inventory: Codable {
@@ -59,4 +59,14 @@ enum ConfigKind: String, Codable, CaseIterable {
 
 enum Unit: String, Codable, CaseIterable {
     case kg, lb
+}
+
+extension Double {
+    var cleanWeight: String {
+        let formatter = NumberFormatter()
+        formatter.minimumFractionDigits = 0
+        formatter.maximumFractionDigits = 10
+        formatter.numberStyle = .decimal
+        return formatter.string(for: self) ?? "\(self)"
+    }
 }

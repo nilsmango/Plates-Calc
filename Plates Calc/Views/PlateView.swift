@@ -102,7 +102,7 @@ struct PlateView: View {
                     
                 }
                 
-                Text("\(plate.weight) \(plate.unit)")
+                Text("\(plate.weight.cleanWeight) \(plate.unit)")
                     .modifier(JiggleModifier(isActive: editMode))
                 
             }
